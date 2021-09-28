@@ -14,63 +14,36 @@ public class FiltradoEmpresas extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField nombreText;
-    private JTextField creditosText;
-    private JTextField cursoText;
-    private JTextField cuatrimestreText;
-    private JTextField idProfeText;
-    private JTextField tipoText;
-    private JTextField idGradoText;
-    private JTextField idText;
-    private JComboBox<String> operatorsCombo;
-    private JRadioButton vacioRadio;
-    private JRadioButton conProfeRadio;
-    private JRadioButton genericoRadioButton;
+    private JTextField telefonoText;
+    private JTextField direccionText;
+    private JTextField cifText;
     private ArrayList<String> previousFilter = new ArrayList<>();
-    private String previousQuery = "select * from asignatura";
+    private String previousQuery = "select * from empresas";
 
     public FiltradoEmpresas(JTable dbTable, DefaultTableModel dftm) {
-        setTitle("Filtrado de Asignaturas");
+        setTitle("Filtrado de Empresas");
         setContentPane(contentPane);
         setSize(550, 550);
         setLocation(ViewEntrada.ancho / 3, ViewEntrada.alto / 4);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
-        // Operadores para campos numeros especificos
-        DefaultComboBoxModel<String> operators = new DefaultComboBoxModel<>();
-        String[] ops = {"=", "<", ">","<=", ">=", "!="};
-        for (int i = 0; i < 6; i++)
-            operators.addElement(ops[i]);
-        operatorsCombo.setModel(operators);
-
-        // Botones Radio para asignatura con o sin profesor
-        ButtonGroup bg = new ButtonGroup();
-        bg.add(genericoRadioButton);
-        bg.add(vacioRadio);
-        bg.add(conProfeRadio);
-
-        genericoRadioButton.doClick(); // Radio seleccionado predeterminado
-
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                String id, nom, cred, tipo, curso, cuatri, idProf, idGr;
-                id = idText.getText();
+                String cif, nom, tel, dir;
+                cif = cifText.getText();
                 nom = nombreText.getText();
-                cred = creditosText.getText();
-                tipo = tipoText.getText().toLowerCase();
-                curso = cursoText.getText();
-                cuatri = cuatrimestreText.getText();
-                idProf = idProfeText.getText();
-                idGr = idGradoText.getText();
+                tel = telefonoText.getText();
+                dir = direccionText.getText().toLowerCase();
                 boolean where = false;
 
-                String query = "select * from asignatura";
+                String query = "select * from empresas";
 
-                if (fieldIsEmpty(id)) {
-                    query += " where id = '" + id + "'";
+                if (fieldIsEmpty(cif)) {
+                    query += " where cif = '" + cif + "'";
                     where = true;
                 } else {
-                    id = "";
+                    cif = "";
                 }
 
                 if (fieldIsEmpty(nom)) {
@@ -85,9 +58,8 @@ public class FiltradoEmpresas extends JDialog {
                     nom = "";
                 }
 
-                if (fieldIsEmpty(cred)) {
-                    String op = (String) operators.getSelectedItem();
-                    String q = "creditos " + op + " " + cred;
+                if (fieldIsEmpty(tel)) {
+                    String q = "telefono like '" + tel + "%'";
                     if (where) {
                         query += " and " + q;
                     } else {
@@ -95,92 +67,25 @@ public class FiltradoEmpresas extends JDialog {
                         where = true;
                     }
                 } else {
-                    cred = "";
+                    tel = "";
                 }
 
-                if (fieldIsEmpty(tipo)) {
-                    String q = "tipo = '" + tipo + "'";
-                    if (where) {
-                        query += " and " + q;
-                    } else {
-                        query += " where " + q;
-                        where = true;
-                    }
-                } else {
-                    tipo = "";
-                }
-
-                if (fieldIsEmpty(curso)) {
-                    String q = "curso = " + curso;
-                    if (where) {
-                        query += " and " + q;
-                    } else {
-                        query += " where " + q;
-                        where = true;
-                    }
-                } else {
-                    curso = "";
-                }
-
-                if (fieldIsEmpty(cuatri)) {
-                    String q = "cuatrimestre = '" + cuatri + "%'";
-                    if (where) {
-                        query += " and " + q;
-                    } else {
-                        query += " where " + q;
-                        where = true;
-                    }
-                } else {
-                    cuatri = "";
-                }
-
-                if (fieldIsEmpty(idProf)) {
-                    if (where) {
-                        query += " and ";
-                    } else {
-                        query += " where ";
-                        where = true;
-                    }
-
-                    String q, subq;
-
-                    if (vacioRadio.isSelected()) { // Filtrar si el campo no tiene profesor
-                        subq = "select profesor.id_profesor from profesor where profesor.id_profesor = asignatura.id_profesor";
-                        q = "not exists (" + subq + ")";
-                    } else if (conProfeRadio.isSelected()) { // Filtrar si el campo tiene profesor
-                        subq = "select profesor.id_profesor from profesor where profesor.id_profesor = asignatura.id_profesor";
-                        q = "exists (" + subq + ")";
-                    } else {
-                        q = "id_profesor = '" + idProf + "%'";
-                    }
-                    query += q;
-                } else {
-                    idProf = "";
-                }
-
-                if (fieldIsEmpty(idGr)) {
-                    String q = "id_grado = '" + idGr + "'";
+                if (fieldIsEmpty(dir)) {
+                    String q = "direccion = '" + dir + "'";
                     if (where) {
                         query += " and " + q;
                     } else {
                         query += " where " + q;
                     }
                 } else {
-                    idGr = "";
+                    dir = "";
                 }
 
                 // Cargar al arraylist para especificar que este fue el filtro usado
-                previousFilter.add(id);
+                previousFilter.add(cif);
                 previousFilter.add(nom);
-                previousFilter.add(cred);
-                previousFilter.add(tipo);
-                previousFilter.add(curso);
-                previousFilter.add(cuatri);
-                previousFilter.add(idProf);
-                previousFilter.add(idGr);
-                previousFilter.add((String) operatorsCombo.getSelectedItem());
-                previousFilter.add(String.valueOf(vacioRadio.isSelected()));
-                previousFilter.add(String.valueOf(conProfeRadio.isSelected()));
+                previousFilter.add(tel);
+                previousFilter.add(dir);
 
                 System.out.println(query);
                 ModelEmpresas asignaturas = new ModelEmpresas();
@@ -192,57 +97,18 @@ public class FiltradoEmpresas extends JDialog {
 
         buttonCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) { // Usado para recuperar el filtro en casp de cancelado
-                String id, nom, cred, tipo, curso, cuatri, idProf, idGr;
-                id = idText.getText();
+                String id, nom, tel, dir;
+                id = cifText.getText();
                 nom = nombreText.getText();
-                cred = creditosText.getText();
-                tipo = tipoText.getText().toLowerCase();
-                curso = cursoText.getText();
-                cuatri = cuatrimestreText.getText();
-                idProf = idProfeText.getText();
-                idGr = idGradoText.getText();
+                tel = telefonoText.getText();
+                dir = direccionText.getText().toLowerCase();
                 previousFilter.add(id);
                 previousFilter.add(nom);
-                previousFilter.add(cred);
-                previousFilter.add(tipo);
-                previousFilter.add(curso);
-                previousFilter.add(cuatri);
-                previousFilter.add(idProf);
-                previousFilter.add(idGr);
-                previousFilter.add((String) operatorsCombo.getSelectedItem());
-                previousFilter.add(String.valueOf(vacioRadio.isSelected()));
-                previousFilter.add(String.valueOf(conProfeRadio.isSelected()));
+                previousFilter.add(tel);
+                previousFilter.add(dir);
                 onCancel();
             }
         });
-
-        genericoRadioButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                idProfeText.setText("");
-                idProfeText.setEnabled(true);
-                idProfeText.setEditable(true);
-            }
-        });
-
-        vacioRadio.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                idProfeText.setText("null");
-                idProfeText.setEnabled(false);
-                idProfeText.setEditable(false);
-            }
-        });
-
-        conProfeRadio.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                idProfeText.setText("not null");
-                idProfeText.setEnabled(false);
-                idProfeText.setEditable(false);
-            }
-        });
-
         // call onCancel() when cross is clicked
         setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
         addWindowListener(new WindowAdapter() {
@@ -271,11 +137,7 @@ public class FiltradoEmpresas extends JDialog {
         if (field.equals("") || field == null) {
             return false;
         } else {
-            if (field.equals("--")) {
-                return false;
-            } else {
-                return true;
-            }
+            return !field.equals("--");
         }
     }
 
@@ -289,25 +151,10 @@ public class FiltradoEmpresas extends JDialog {
 
     public void setData(ArrayList<String> pvData) { // Cargar datos del filtro anterior al filtro nuevo
         if (!(pvData.size() == 0)) {
-            idText.setText(pvData.get(0));
+            cifText.setText(pvData.get(0));
             nombreText.setText(pvData.get(1));
-            creditosText.setText(pvData.get(2));
-            tipoText.setText(pvData.get(3));
-            cursoText.setText(pvData.get(4));
-            cuatrimestreText.setText(pvData.get(5));
-            idProfeText.setText(pvData.get(6));
-            idGradoText.setText(pvData.get(7));
-
-            operatorsCombo.setSelectedItem(pvData.get(8));
-
-            boolean vacio = Boolean.parseBoolean(pvData.get(9));
-            boolean conProfe = Boolean.parseBoolean(pvData.get(10));
-
-            if (vacio)
-                vacioRadio.doClick();
-
-            if (conProfe)
-                conProfeRadio.doClick();
+            telefonoText.setText(pvData.get(2));
+            direccionText.setText(pvData.get(3));
         }
     }
 }

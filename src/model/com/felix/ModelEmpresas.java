@@ -13,15 +13,15 @@ import java.sql.Statement;
 public class ModelEmpresas {
 
     private Statement stmt;
-    public static String[] titulos; // Usado para recoger titulos en otros dialogos
+    public static String[] campos; // Usado para recoger campos en otros dialogos
 
     public ModelEmpresas() {
         ConectionBD.OpenConn();
     }
 
     public DefaultTableModel CargaDatos(DefaultTableModel m) {
-        titulos = new String[]{"id", "Nombre", "Creditos", "Tipo", "Curso", "Cuatrimestre", "Id Profesor", "Id Grado"};
-        m = new DefaultTableModel(null, titulos);
+        campos = new String[]{"CIF", "Nombre", "Telefono", "Direccion"};
+        m = new DefaultTableModel(null, campos);
 
         try {
             stmt = ConectionBD.getStmt();
@@ -29,14 +29,10 @@ public class ModelEmpresas {
             String[] fila = new String[8];
 
             while (rs.next()) {
-                fila[0] = rs.getString("id");
+                fila[0] = rs.getString("cif");
                 fila[1] = rs.getString("nombre");
-                fila[2] = rs.getString("creditos");
-                fila[3] = rs.getString("tipo");
-                fila[4] = rs.getString("curso");
-                fila[5] = rs.getString("cuatrimestre");
-                fila[6] = rs.getString("id_profesor");
-                fila[7] = rs.getString("id_grado");
+                fila[2] = rs.getString("telefono");
+                fila[3] = rs.getString("direccion");
                 m.addRow(fila);
             }
         } catch (SQLException e) {
@@ -47,8 +43,8 @@ public class ModelEmpresas {
 
     // Usado para cargar un modelo con una consulta especifica (Filtros y Ordenados)
     public DefaultTableModel CargaDatos(DefaultTableModel m, String sql) {
-        titulos = new String[]{"id", "Nombre", "Creditos", "Tipo", "Curso", "Cuatrimestre", "Id Profesor", "Id Grado"};
-        m = new DefaultTableModel(null, titulos);
+        campos = new String[]{"CIF", "Nombre", "Telefono", "Dirección"};
+        m = new DefaultTableModel(null, campos);
 
         try {
             stmt = ConectionBD.getStmt();
@@ -56,14 +52,10 @@ public class ModelEmpresas {
             String[] fila = new String[8];
 
             while (rs.next()) {
-                fila[0] = rs.getString("id");
+                fila[0] = rs.getString("cif");
                 fila[1] = rs.getString("nombre");
-                fila[2] = rs.getString("creditos");
-                fila[3] = rs.getString("tipo");
-                fila[4] = rs.getString("curso");
-                fila[5] = rs.getString("cuatrimestre");
-                fila[6] = rs.getString("id_profesor");
-                fila[7] = rs.getString("id_grado");
+                fila[2] = rs.getString("telefono");
+                fila[3] = rs.getString("direccion");
                 m.addRow(fila);
             }
         } catch (SQLException e) {
@@ -84,13 +76,12 @@ public class ModelEmpresas {
                 showDialog("No se ha seleccionado ningun registro");
             } else {
                 int confirm = JOptionPane.showConfirmDialog(null,
-                        "Eliminar?", "Eliminar Registro", JOptionPane.YES_NO_OPTION);
+                        "Eliminar empresa?", "Eliminar Registro", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    DefaultTableModel asignaturas = new ModelEmpresas().CargaDatos(m);
-                    String id = (String) asignaturas.getValueAt(selected, 0);
+                    DefaultTableModel empresas = new ModelEmpresas().CargaDatos(m);
+                    String cif = (String) empresas.getValueAt(selected, 0);
                     Statement sentencia = ConectionBD.getStmt();
-                    sentencia.executeUpdate("delete from alumno_se_matricula_asignatura where id_asignatura = " + id);
-                    sentencia.executeUpdate("delete from asignatura where id = " + id);
+                    sentencia.executeUpdate("delete from empresas where cif = " + cif);
                     ModelEmpresas p = new ModelEmpresas();
                     tabla.setModel(p.CargaDatos(m));
                 }
@@ -108,14 +99,14 @@ public class ModelEmpresas {
                 showDialog("No se ha seleccionado ningun registro");
             } else {
                 ModificacionDatosEmpresas modificacion = new ModificacionDatosEmpresas();
-                DefaultTableModel asignaturas = new ModelEmpresas().CargaDatos(m);
-                modificacion.setData(asignaturas, selected); // Cargar datos del registro seleccionado
+                DefaultTableModel empresas = new ModelEmpresas().CargaDatos(m);
+                modificacion.setData(empresas, selected); // Cargar datos del registro seleccionado
                 modificacion.setVisible(true);
                 tabla.setModel(new ModelEmpresas().CargaDatos(m));
             }
         } catch (Exception exc) {
             exc.printStackTrace();
-            showDialog("Ocurrio un error al modificar la asignatura");
+            showDialog("Ocurrio un error al modificar la empresa");
         }
         ModelEmpresas a = new ModelEmpresas();
         tabla.setModel(a.CargaDatos(m));

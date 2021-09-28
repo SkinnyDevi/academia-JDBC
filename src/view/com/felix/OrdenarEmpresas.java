@@ -22,7 +22,7 @@ public class OrdenarEmpresas extends JDialog {
         getRootPane().setDefaultButton(buttonOK);
 
         DefaultComboBoxModel<String> filas = new DefaultComboBoxModel<>();
-        for (String t : ModelEmpresas.titulos) {
+        for (String t : ModelEmpresas.campos) {
             filas.addElement(t);
         }
         filasCombo.setModel(filas);
@@ -30,14 +30,7 @@ public class OrdenarEmpresas extends JDialog {
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 String c = (String) filasCombo.getSelectedItem();
-                switch (c) {
-                    case "Id Profesor":
-                        c = "id_profesor";
-                        break;
-                    case "Id Grado":
-                        c = "id_grado";
-                        break;
-                }
+                c = c.toLowerCase();
                 String orderQ = pvQuery + " order by " + c;
                 if (descendenteCheckBox.isSelected())
                     orderQ += " desc";
