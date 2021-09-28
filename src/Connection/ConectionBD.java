@@ -12,7 +12,7 @@ public class ConectionBD {
     private static final String port = "3306";
     private static final String user = "root";
     private static final String passwd = "baeElrincon";
-    private static final String db = "universidad";
+    private static final String db = "academiaClases";
     private static Statement stmt;
     private static ResultSet rs;
 

@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class ControllerEmpresas implements ActionListener, MouseListener, WindowListener, KeyListener {
     private final ViewEntrada frentrada = new ViewEntrada();
     private final JPanel mainPanel = frentrada.getPanelEntrada();
-    private final JTable tablaDatos = frentrada.getContentTable();
-    private final JButton asignaturasButton = frentrada.getEmpresasButton();
+    private final JTable contentTable = frentrada.getContentTable();
+    private final JButton empresasButton = frentrada.getEmpresasButton();
     private final JButton filtrarButton = frentrada.getFiltrarButton();
     private final JButton resetearFiltroButton = frentrada.getResetearFiltro();
     private final JButton eliminarButton = frentrada.getEliminarButton();
@@ -24,7 +24,7 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
     private final JButton ordenarButton = frentrada.getOrdenadoButton();
     private ArrayList<String> prevFilter = new ArrayList<>();
     private final DefaultTableModel m = null;
-    private String prevQuery = "select * from asignatura";
+    private String prevQuery = "select * from empresas";
 
     public ControllerEmpresas() {
         IniciarVentana();
@@ -37,8 +37,7 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
     }
 
     public void IniciarEventos() {
-        asignaturasButton.addActionListener(this);
-        personasButton.addActionListener(this);
+        empresasButton.addActionListener(this);
         filtrarButton.addActionListener(this);
         resetearFiltroButton.addActionListener(this);
         agregarButton.addActionListener(this);
@@ -46,13 +45,13 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
         eliminarButton.addActionListener(this);
         ordenarButton.addActionListener(this);
         mainPanel.addMouseListener(this);
-        tablaDatos.addMouseListener(this);
+        contentTable.addMouseListener(this);
         frentrada.addWindowListener(this);
     }
 
     public void PrepararBaseDatos() {
         ModelEmpresas entrada = new ModelEmpresas();
-        tablaDatos.setModel(entrada.CargaDatos(m));
+        contentTable.setModel(entrada.CargaDatos(m));
     }
 
     @Override
@@ -62,44 +61,44 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
         switch (entrada) {
             case "Resetear Filtro": // Limpia el filtro y consulta anterior
                 prevFilter = new ArrayList<>();
-                prevQuery = "select * from asignatura";
-            case "Asignaturas":
-                ModelEmpresas asignatura = new ModelEmpresas();
-                tablaDatos.setModel(asignatura.CargaDatos(m));
+                prevQuery = "select * from empresas";
+            case "Empresas":
+                ModelEmpresas empresas = new ModelEmpresas();
+                contentTable.setModel(empresas.CargaDatos(m));
                 break;
-            case "Personas":
+            case "NuevaTabla":
                 try {
                     frentrada.dispose();
-                    //new ControllerPersonas();
+                    //new ControladorNuevaTabla();
                 } catch (NullPointerException nullP) {
                     nullP.printStackTrace();
                 }
                 break;
             case "Abrir Opciones de Filtrado":
-                FiltradoEmpresas fa = new FiltradoEmpresas(tablaDatos, m);
-                fa.setData(prevFilter); // Carga los datos del filtro anterior
-                fa.setVisible(true);
-                prevFilter = fa.getPreviousFilter();
-                prevQuery = fa.getPreviousQuery();
+                FiltradoEmpresas fe = new FiltradoEmpresas(contentTable, m);
+                fe.setData(prevFilter); // Carga los datos del filtro anterior
+                fe.setVisible(true);
+                prevFilter = fe.getPreviousFilter();
+                prevQuery = fe.getPreviousQuery();
                 break;
             case "Añadir":
                 InsercionDatosEmpresas insercion = new InsercionDatosEmpresas();
                 insercion.setVisible(true);
-                ModelEmpresas pAdd = new ModelEmpresas();
-                tablaDatos.setModel(pAdd.CargaDatos(m));
+                ModelEmpresas meAdd = new ModelEmpresas();
+                contentTable.setModel(meAdd.CargaDatos(m));
                 break;
             case "Editar":
-                ModelEmpresas maed = new ModelEmpresas();
-                maed.editarRegistro(tablaDatos, m);
+                ModelEmpresas meEd = new ModelEmpresas();
+                meEd.editarRegistro(contentTable, m);
                 break;
             case "Eliminar":
-                ModelEmpresas mae = new ModelEmpresas();
-                mae.eliminarRegistro(tablaDatos, m);
+                ModelEmpresas meE = new ModelEmpresas();
+                meE.eliminarRegistro(contentTable, m);
                 break;
             case "Ordenar":
-                DefaultTableModel asignaturas = new ModelEmpresas().CargaDatos(m, prevQuery);
-                OrdenarEmpresas oa = new OrdenarEmpresas(tablaDatos, asignaturas, prevQuery);
-                oa.setVisible(true);
+                DefaultTableModel empresasDFTM = new ModelEmpresas().CargaDatos(m, prevQuery);
+                OrdenarEmpresas oe = new OrdenarEmpresas(contentTable, empresasDFTM, prevQuery);
+                oe.setVisible(true);
                 break;
         }
     }

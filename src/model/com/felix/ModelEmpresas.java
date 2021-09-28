@@ -25,7 +25,7 @@ public class ModelEmpresas {
 
         try {
             stmt = ConectionBD.getStmt();
-            ResultSet rs = stmt.executeQuery("select * from asignatura");
+            ResultSet rs = stmt.executeQuery("select * from empresas");
             String[] fila = new String[4];
 
             while (rs.next()) {
@@ -43,7 +43,7 @@ public class ModelEmpresas {
 
     // Usado para cargar un modelo con una consulta especifica (Filtros y Ordenados)
     public DefaultTableModel CargaDatos(DefaultTableModel m, String sql) {
-        campos = new String[]{"CIF", "Nombre", "Telefono", "Dirección"};
+        campos = new String[]{"CIF", "Nombre", "Telefono", "Direccion"};
         m = new DefaultTableModel(null, campos);
 
         try {
@@ -81,7 +81,7 @@ public class ModelEmpresas {
                     DefaultTableModel empresas = new ModelEmpresas().CargaDatos(m);
                     String cif = (String) empresas.getValueAt(selected, 0);
                     Statement sentencia = ConectionBD.getStmt();
-                    sentencia.executeUpdate("delete from empresas where cif = " + cif);
+                    sentencia.executeUpdate(String.format("delete from empresas where cif = '%s'", cif));
                     ModelEmpresas p = new ModelEmpresas();
                     tabla.setModel(p.CargaDatos(m));
                 }

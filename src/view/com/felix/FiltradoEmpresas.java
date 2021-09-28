@@ -34,13 +34,13 @@ public class FiltradoEmpresas extends JDialog {
                 cif = cifText.getText();
                 nom = nombreText.getText();
                 tel = telefonoText.getText();
-                dir = direccionText.getText().toLowerCase();
+                dir = direccionText.getText();
                 boolean where = false;
 
                 String query = "select * from empresas";
 
                 if (fieldIsEmpty(cif)) {
-                    query += " where cif = '" + cif + "'";
+                    query += " where cif like '" + cif + "%'";
                     where = true;
                 } else {
                     cif = "";
@@ -71,7 +71,7 @@ public class FiltradoEmpresas extends JDialog {
                 }
 
                 if (fieldIsEmpty(dir)) {
-                    String q = "direccion = '" + dir + "'";
+                    String q = "direccion like '" + dir + "%'";
                     if (where) {
                         query += " and " + q;
                     } else {
@@ -101,7 +101,7 @@ public class FiltradoEmpresas extends JDialog {
                 id = cifText.getText();
                 nom = nombreText.getText();
                 tel = telefonoText.getText();
-                dir = direccionText.getText().toLowerCase();
+                dir = direccionText.getText();
                 previousFilter.add(id);
                 previousFilter.add(nom);
                 previousFilter.add(tel);

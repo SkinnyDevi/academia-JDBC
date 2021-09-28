@@ -38,11 +38,11 @@ public class ModificacionDatosEmpresas extends JDialog {
                 dir = direccionText.getText();
 
                 try {
-                    String query = String.format("update asignatura " +
+                    String query = String.format("update empresas " +
                                     "set nombre = '%s', " +
                                     "telefono = '%s', " +
-                                    "direccion = '%s', " +
-                                    "where id = %s",
+                                    "direccion = '%s' " +
+                                    "where cif = '%s'",
                             nom, tel, dir, tempCif);
                     sentencia.executeUpdate(query);
                 } catch (SQLException throwables) {
@@ -88,7 +88,7 @@ public class ModificacionDatosEmpresas extends JDialog {
 
     // Usado para cargar los datos del registro seleccionado
     public void setData(DefaultTableModel dftm, int s) {
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 4; i++)
             System.out.println(value(dftm, s, i));
         this.tempCif = value(dftm, s, 0);
         cifText.setText(value(dftm, s, 0));

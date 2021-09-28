@@ -35,7 +35,7 @@ public class InsercionDatosEmpresas extends JDialog {
                 cif = cifText.getText();
                 nom = nombreText.getText();
                 tel = telefonoText.getText();
-                dir = direccionText.getText().toLowerCase();
+                dir = direccionText.getText();
 
                 try {
                     String query = String.format("insert into empresas values('%s', '%s', '%s', '%s')",
