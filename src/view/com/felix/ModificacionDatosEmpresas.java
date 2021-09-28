@@ -14,15 +14,11 @@ public class ModificacionDatosEmpresas extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField idText;
+    private JTextField cifText;
     private JTextField nombreText;
-    private JTextField creditosText;
-    private JTextField cursoText;
-    private JTextField cuatrimestreText;
-    private JTextField idProfeText;
-    private JTextField tipoText;
-    private JTextField idGradoText;
-    private String tempId;
+    private JTextField telefonoText;
+    private JTextField direccionText;
+    private String tempCif;
 
     public ModificacionDatosEmpresas() {
         setTitle("Modificar Asignatura");
@@ -36,32 +32,23 @@ public class ModificacionDatosEmpresas extends JDialog {
             public void actionPerformed(ActionEvent e) {
                 boolean successful = true;
                 Statement sentencia = ConectionBD.getStmt();
-                String nom, cred, tipo, curso, cuatri, idProf, idGr;
+                String nom, tel, dir;
                 nom = nombreText.getText();
-                cred = creditosText.getText();
-                tipo = tipoText.getText();
-                curso = cursoText.getText();
-                cuatri = cuatrimestreText.getText();
-                // Si el idProf es = "" idProf = null, si no idProf = texto entrada
-                idProf = idProfeText.getText().equals("") ? null : idProfeText.getText();
-                idGr = idGradoText.getText().toLowerCase();
+                tel = telefonoText.getText();
+                dir = direccionText.getText();
 
                 try {
                     String query = String.format("update asignatura " +
                                     "set nombre = '%s', " +
-                                    "creditos = '%s', " +
-                                    "tipo = '%s', " +
-                                    "curso = '%s', " +
-                                    "cuatrimestre = '%s', " +
-                                    "id_profesor = %s, " +
-                                    "id_grado = '%s' " +
+                                    "telefono = '%s', " +
+                                    "direccion = '%s', " +
                                     "where id = %s",
-                            nom, cred, tipo, curso, cuatri, idProf, idGr, tempId);
+                            nom, tel, dir, tempCif);
                     sentencia.executeUpdate(query);
                 } catch (SQLException throwables) {
                     successful = false;
                     throwables.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al insertar la asignatura.");
+                    JOptionPane.showMessageDialog(null, "Error al modificar la empresa.");
                 }
                 if (successful) {
                     onOK();
@@ -103,15 +90,11 @@ public class ModificacionDatosEmpresas extends JDialog {
     public void setData(DefaultTableModel dftm, int s) {
         for (int i = 0; i < 7; i++)
             System.out.println(value(dftm, s, i));
-        this.tempId = value(dftm, s, 0);
-        idText.setText(value(dftm, s, 0));
+        this.tempCif = value(dftm, s, 0);
+        cifText.setText(value(dftm, s, 0));
         nombreText.setText(value(dftm, s, 1));
-        creditosText.setText(value(dftm, s, 2));
-        tipoText.setText(value(dftm, s, 3));
-        cursoText.setText(value(dftm, s, 4));
-        cuatrimestreText.setText(value(dftm, s, 5));
-        idProfeText.setText(value(dftm, s, 6));
-        idGradoText.setText(value(dftm, s, 7));
+        telefonoText.setText(value(dftm, s, 2));
+        direccionText.setText(value(dftm, s, 3));
     }
 
     private String value(DefaultTableModel dftm, int s, int i) {

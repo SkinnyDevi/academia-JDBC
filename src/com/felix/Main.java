@@ -1,6 +1,6 @@
 package com.felix;
 
-import Controler.com.felix.ControllerEmpresas;
+import Controller.com.felix.ControllerEmpresas;
 
 public class Main {
     public static void main(String[] args) {

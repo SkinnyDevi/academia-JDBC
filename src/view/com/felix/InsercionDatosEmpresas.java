@@ -14,12 +14,9 @@ public class InsercionDatosEmpresas extends JDialog {
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField nombreText;
-    private JTextField creditosText;
-    private JTextField cursoText;
-    private JTextField cuatrimestreText;
-    private JTextField idProfeText;
-    private JTextField tipoText;
-    private JTextField idGradoText;
+    private JTextField telefonoText;
+    private JTextField direccionText;
+    private JTextField cifText;
 
     public InsercionDatosEmpresas() {
         setTitle("Agregar Asignatura");
@@ -32,26 +29,22 @@ public class InsercionDatosEmpresas extends JDialog {
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Statement sentencia = ConectionBD.getStmt();
-                String nom, cred, tipo, curso, cuatri, idProf, idGr;
+                String cif, nom, tel, dir;
                 boolean successful = true;
 
+                cif = cifText.getText();
                 nom = nombreText.getText();
-                cred = creditosText.getText();
-                tipo = tipoText.getText().toLowerCase();
-                curso = cursoText.getText();
-                cuatri = cuatrimestreText.getText();
-                // Si el idProf es = "" idProf = null, si no idProf = texto entrada
-                idProf = idProfeText.getText().equals("") ? null : idProfeText.getText();
-                idGr = idGradoText.getText().toLowerCase();
+                tel = telefonoText.getText();
+                dir = direccionText.getText().toLowerCase();
 
                 try {
-                    String query = String.format("insert into asignatura values(null, '%s', '%s', '%s', '%s', '%s', %s, '%s')",
-                            nom, cred, tipo, curso, cuatri, idProf, idGr);
+                    String query = String.format("insert into empresas values('%s', '%s', '%s', '%s')",
+                            cif, nom, tel, dir);
                     sentencia.executeUpdate(query);
                 } catch (SQLException throwables) {
                     successful = false;
                     throwables.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al insertar asignatura.");
+                    JOptionPane.showMessageDialog(null, "Error al insertar la empresa.");
                 }
                 if (successful) {
                     onOK();

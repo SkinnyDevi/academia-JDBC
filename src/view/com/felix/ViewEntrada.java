@@ -6,9 +6,8 @@ public class ViewEntrada extends JFrame {
     public static final int ancho = java.awt.Toolkit.getDefaultToolkit().getScreenSize().width;
     public static final int alto = java.awt.Toolkit.getDefaultToolkit().getScreenSize().height;
     private JPanel PanelEntrada;
-    private JTable table1;
-    private JButton asignaturasButton;
-    private JButton personasButton;
+    private JTable contentTable;
+    private JButton empresasButton;
     private JButton filtrarButton;
     private JButton eliminarButton;
     private JButton agregarButton;
@@ -17,7 +16,7 @@ public class ViewEntrada extends JFrame {
     private JButton ordenadoButton;
 
     public ViewEntrada() {
-        super("Gestion Universidad");
+        super("Academia de Clases");
         setContentPane(PanelEntrada);
         setSize(ancho, alto);
     }
@@ -26,16 +25,12 @@ public class ViewEntrada extends JFrame {
         return PanelEntrada;
     }
 
-    public JTable getTable1() {
-        return table1;
+    public JTable getContentTable() {
+        return contentTable;
     }
 
-    public JButton getAsignaturasButton() {
-        return asignaturasButton;
-    }
-
-    public JButton getPersonasButton() {
-        return personasButton;
+    public JButton getEmpresasButton() {
+        return empresasButton;
     }
 
     public JButton getFiltrarButton() {

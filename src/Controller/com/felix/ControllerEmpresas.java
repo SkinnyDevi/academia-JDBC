@@ -1,4 +1,4 @@
-package Controler.com.felix;
+package Controller.com.felix;
 
 import Connection.ConectionBD;
 import model.com.felix.ModelEmpresas;
@@ -14,9 +14,8 @@ import java.util.ArrayList;
 public class ControllerEmpresas implements ActionListener, MouseListener, WindowListener, KeyListener {
     private final ViewEntrada frentrada = new ViewEntrada();
     private final JPanel mainPanel = frentrada.getPanelEntrada();
-    private final JTable tablaDatos = frentrada.getTable1();
-    private final JButton asignaturasButton = frentrada.getAsignaturasButton();
-    private final JButton personasButton = frentrada.getPersonasButton();
+    private final JTable tablaDatos = frentrada.getContentTable();
+    private final JButton asignaturasButton = frentrada.getEmpresasButton();
     private final JButton filtrarButton = frentrada.getFiltrarButton();
     private final JButton resetearFiltroButton = frentrada.getResetearFiltro();
     private final JButton eliminarButton = frentrada.getEliminarButton();

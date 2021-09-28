@@ -26,7 +26,7 @@ public class ModelEmpresas {
         try {
             stmt = ConectionBD.getStmt();
             ResultSet rs = stmt.executeQuery("select * from asignatura");
-            String[] fila = new String[8];
+            String[] fila = new String[4];
 
             while (rs.next()) {
                 fila[0] = rs.getString("cif");
@@ -49,7 +49,7 @@ public class ModelEmpresas {
         try {
             stmt = ConectionBD.getStmt();
             ResultSet rs = stmt.executeQuery(sql);
-            String[] fila = new String[8];
+            String[] fila = new String[4];
 
             while (rs.next()) {
                 fila[0] = rs.getString("cif");
