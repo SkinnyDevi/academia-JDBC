@@ -14,6 +14,7 @@ public class ViewEntrada extends JFrame {
     private JButton editarButton;
     private JButton resetearFiltro;
     private JButton ordenadoButton;
+    private JButton profesoresButton;
 
     public ViewEntrada() {
         super("Academia de Clases");
@@ -55,5 +56,9 @@ public class ViewEntrada extends JFrame {
 
     public JButton getOrdenadoButton() {
         return ordenadoButton;
+    }
+
+    public JButton getProfesoresButton() {
+        return profesoresButton;
     }
 }

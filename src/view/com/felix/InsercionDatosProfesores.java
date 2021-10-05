@@ -3,22 +3,21 @@ package view.com.felix;
 import Connection.ConectionBD;
 
 import javax.swing.*;
-
 import java.awt.event.*;
-
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class InsercionDatosEmpresas extends JDialog {
+public class InsercionDatosProfesores extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField nombreText;
     private JTextField telefonoText;
     private JTextField direccionText;
-    private JTextField cifText;
+    private JTextField dniText;
+    private JTextField apellidoText;
 
-    public InsercionDatosEmpresas() {
+    public InsercionDatosProfesores() {
         setTitle("Agregar Profesores");
         setContentPane(contentPane);
         setSize(500, 500);
@@ -29,22 +28,23 @@ public class InsercionDatosEmpresas extends JDialog {
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 Statement sentencia = ConectionBD.getStmt();
-                String cif, nom, tel, dir;
+                String dni, nom, apel, tel, dir;
                 boolean successful = true;
 
-                cif = cifText.getText();
+                dni = dniText.getText();
+                apel = apellidoText.getText();
                 nom = nombreText.getText();
                 tel = telefonoText.getText();
                 dir = direccionText.getText();
 
                 try {
-                    String query = String.format("insert into empresas values('%s', '%s', '%s', '%s')",
-                            cif, nom, tel, dir);
+                    String query = String.format("INSERT INTO profesores VALUES ('%s', '%s', '%s', '%s', '%s')",
+                            dni, nom, apel, tel, dir);
                     sentencia.executeUpdate(query);
                 } catch (SQLException throwables) {
                     successful = false;
                     throwables.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al insertar la empresa.");
+                    JOptionPane.showMessageDialog(null, "Error al insertar la profesor.");
                 }
                 if (successful) {
                     onOK();

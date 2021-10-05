@@ -1,54 +1,42 @@
 package view.com.felix;
 
-import Connection.ConectionBD;
+import model.com.felix.ModelProfesores;
 
 import javax.swing.*;
-
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 
-import java.sql.SQLException;
-import java.sql.Statement;
-
-public class InsercionDatosEmpresas extends JDialog {
+public class OrdenarProfesores extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField nombreText;
-    private JTextField telefonoText;
-    private JTextField direccionText;
-    private JTextField cifText;
+    private JComboBox<String> filasCombo;
+    private JCheckBox descendenteCheckBox;
 
-    public InsercionDatosEmpresas() {
-        setTitle("Agregar Profesores");
+    public OrdenarProfesores(JTable dbTable, DefaultTableModel dftm, String pvQuery) {
         setContentPane(contentPane);
-        setSize(500, 500);
+        setSize(400, 150);
         setLocation(ViewEntrada.ancho / 3, ViewEntrada.alto / 4);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        DefaultComboBoxModel<String> filas = new DefaultComboBoxModel<>();
+        for (String t : ModelProfesores.campos) {
+            filas.addElement(t);
+        }
+        filasCombo.setModel(filas);
+
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Statement sentencia = ConectionBD.getStmt();
-                String cif, nom, tel, dir;
-                boolean successful = true;
-
-                cif = cifText.getText();
-                nom = nombreText.getText();
-                tel = telefonoText.getText();
-                dir = direccionText.getText();
-
-                try {
-                    String query = String.format("insert into empresas values('%s', '%s', '%s', '%s')",
-                            cif, nom, tel, dir);
-                    sentencia.executeUpdate(query);
-                } catch (SQLException throwables) {
-                    successful = false;
-                    throwables.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al insertar la empresa.");
-                }
-                if (successful) {
-                    onOK();
-                }
+                String c = (String) filasCombo.getSelectedItem();
+                c = c.toLowerCase();
+                String orderQ = pvQuery + " order by " + c;
+                if (descendenteCheckBox.isSelected())
+                    orderQ += " desc";
+                System.out.println(orderQ);
+                ModelProfesores mp = new ModelProfesores();
+                dbTable.setModel(mp.CargaDatos(dftm, orderQ));
+                onOK();
             }
         });
 

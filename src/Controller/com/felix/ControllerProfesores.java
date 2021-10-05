@@ -2,16 +2,15 @@ package Controller.com.felix;
 
 import Connection.ConectionBD;
 import model.com.felix.ModelEmpresas;
+import model.com.felix.ModelProfesores;
 import view.com.felix.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-
 import java.awt.event.*;
-
 import java.util.ArrayList;
 
-public class ControllerEmpresas implements ActionListener, MouseListener, WindowListener, KeyListener {
+public class ControllerProfesores implements ActionListener, MouseListener, WindowListener, KeyListener {
     private final ViewEntrada frentrada = new ViewEntrada();
     private final JPanel mainPanel = frentrada.getPanelEntrada();
     private final JTable contentTable = frentrada.getContentTable();
@@ -25,9 +24,9 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
     private final JButton ordenarButton = frentrada.getOrdenadoButton();
     private ArrayList<String> prevFilter = new ArrayList<>();
     private final DefaultTableModel m = null;
-    private String prevQuery = "select * from empresas";
+    private String prevQuery = "select * from profesores";
 
-    public ControllerEmpresas() {
+    public ControllerProfesores() {
         IniciarVentana();
         IniciarEventos();
         PrepararBaseDatos();
@@ -52,7 +51,7 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
     }
 
     public void PrepararBaseDatos() {
-        ModelEmpresas entrada = new ModelEmpresas();
+        ModelProfesores entrada = new ModelProfesores();
         contentTable.setModel(entrada.CargaDatos(m));
     }
 
@@ -63,44 +62,44 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
         switch (entrada) {
             case "Resetear Filtro": // Limpia el filtro y consulta anterior
                 prevFilter = new ArrayList<>();
-                prevQuery = "select * from empresas";
-            case "Empresas":
-                ModelEmpresas empresas = new ModelEmpresas();
-                contentTable.setModel(empresas.CargaDatos(m));
-                break;
+                prevQuery = "select * from profesores";
             case "Profesores":
+                ModelProfesores profesores = new ModelProfesores();
+                contentTable.setModel(profesores.CargaDatos(m));
+                break;
+            case "Empresas":
                 try {
                     frentrada.dispose();
-                    new ControllerProfesores();
+                    new ControllerEmpresas();
                 } catch (NullPointerException nullP) {
                     nullP.printStackTrace();
                 }
                 break;
             case "Abrir Opciones de Filtrado":
-                FiltradoEmpresas fe = new FiltradoEmpresas(contentTable, m);
-                fe.setData(prevFilter); // Carga los datos del filtro anterior
-                fe.setVisible(true);
-                prevFilter = fe.getPreviousFilter();
-                prevQuery = fe.getPreviousQuery();
+                FiltradoProfesores fp = new FiltradoProfesores(contentTable, m);
+                fp.setData(prevFilter); // Carga los datos del filtro anterior
+                fp.setVisible(true);
+                prevFilter = fp.getPreviousFilter();
+                prevQuery = fp.getPreviousQuery();
                 break;
             case "Añadir":
-                InsercionDatosEmpresas insercion = new InsercionDatosEmpresas();
+                InsercionDatosProfesores insercion = new InsercionDatosProfesores();
                 insercion.setVisible(true);
-                ModelEmpresas meAdd = new ModelEmpresas();
-                contentTable.setModel(meAdd.CargaDatos(m));
+                ModelProfesores mpAdd = new ModelProfesores();
+                contentTable.setModel(mpAdd.CargaDatos(m));
                 break;
             case "Editar":
-                ModelEmpresas meEd = new ModelEmpresas();
-                meEd.editarRegistro(contentTable, m);
+                ModelProfesores mpEd = new ModelProfesores();
+                mpEd.editarRegistro(contentTable, m);
                 break;
             case "Eliminar":
-                ModelEmpresas meE = new ModelEmpresas();
-                meE.eliminarRegistro(contentTable, m);
+                ModelProfesores mpE = new ModelProfesores();
+                mpE.eliminarRegistro(contentTable, m);
                 break;
             case "Ordenar":
-                DefaultTableModel empresasDFTM = new ModelEmpresas().CargaDatos(m, prevQuery);
-                OrdenarEmpresas oe = new OrdenarEmpresas(contentTable, empresasDFTM, prevQuery);
-                oe.setVisible(true);
+                DefaultTableModel profesoresDFTM = new ModelProfesores().CargaDatos(m, prevQuery);
+                OrdenarProfesores op = new OrdenarProfesores(contentTable, profesoresDFTM, prevQuery);
+                op.setVisible(true);
                 break;
         }
     }
