@@ -17,6 +17,8 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
     private final JTable contentTable = frentrada.getContentTable();
     private final JButton empresasButton = frentrada.getEmpresasButton();
     private final JButton profesoresButton = frentrada.getProfesoresButton();
+    private final JButton cursosButton = frentrada.getCursosButton();
+    private final JButton programasCursosButton = frentrada.getProgramasCursosButton();
     private final JButton filtrarButton = frentrada.getFiltrarButton();
     private final JButton resetearFiltroButton = frentrada.getResetearFiltro();
     private final JButton eliminarButton = frentrada.getEliminarButton();
@@ -40,6 +42,8 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
     public void IniciarEventos() {
         empresasButton.addActionListener(this);
         profesoresButton.addActionListener(this);
+        cursosButton.addActionListener(this);
+        programasCursosButton.addActionListener(this);
         filtrarButton.addActionListener(this);
         resetearFiltroButton.addActionListener(this);
         agregarButton.addActionListener(this);
@@ -72,6 +76,22 @@ public class ControllerEmpresas implements ActionListener, MouseListener, Window
                 try {
                     frentrada.dispose();
                     new ControllerProfesores();
+                } catch (NullPointerException nullP) {
+                    nullP.printStackTrace();
+                }
+                break;
+            case "Cursos":
+                try {
+                    frentrada.dispose();
+                    new ControllerCursos();
+                } catch (NullPointerException nullP) {
+                    nullP.printStackTrace();
+                }
+                break;
+            case "Programas":
+                try {
+                    frentrada.dispose();
+                    new ControllerProgramasCursos();
                 } catch (NullPointerException nullP) {
                     nullP.printStackTrace();
                 }

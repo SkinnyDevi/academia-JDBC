@@ -88,8 +88,8 @@ public class FiltradoEmpresas extends JDialog {
                 previousFilter.add(dir);
 
                 System.out.println(query);
-                ModelEmpresas asignaturas = new ModelEmpresas();
-                dbTable.setModel(asignaturas.CargaDatos(dftm, query));
+                ModelEmpresas empresas = new ModelEmpresas();
+                dbTable.setModel(empresas.CargaDatos(dftm, query));
                 previousQuery = query; // Cargamos a la consulta anterior para el ordenado
                 onOK();
             }

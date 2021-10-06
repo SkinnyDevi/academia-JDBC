@@ -1,6 +1,5 @@
 package view.com.felix;
 
-import model.com.felix.ModelEmpresas;
 import model.com.felix.ModelProfesores;
 
 import javax.swing.*;

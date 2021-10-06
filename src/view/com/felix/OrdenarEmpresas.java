@@ -35,8 +35,8 @@ public class OrdenarEmpresas extends JDialog {
                 if (descendenteCheckBox.isSelected())
                     orderQ += " desc";
                 System.out.println(orderQ);
-                ModelEmpresas ma = new ModelEmpresas();
-                dbTable.setModel(ma.CargaDatos(dftm, orderQ));
+                ModelEmpresas me = new ModelEmpresas();
+                dbTable.setModel(me.CargaDatos(dftm, orderQ));
                 onOK();
             }
         });
