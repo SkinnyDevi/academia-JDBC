@@ -18,6 +18,7 @@ public class ControllerProgramasCursos implements ActionListener, MouseListener,
     private final JButton profesoresButton = frentrada.getProfesoresButton();
     private final JButton programasCursosButton = frentrada.getProgramasCursosButton();
     private final JButton cursosButton = frentrada.getCursosButton();
+    private final JButton alunmosButton = frentrada.getAlumnosButton();;
     private final JButton filtrarButton = frentrada.getFiltrarButton();
     private final JButton resetearFiltroButton = frentrada.getResetearFiltro();
     private final JButton eliminarButton = frentrada.getEliminarButton();
@@ -43,6 +44,7 @@ public class ControllerProgramasCursos implements ActionListener, MouseListener,
         profesoresButton.addActionListener(this);
         cursosButton.addActionListener(this);
         programasCursosButton.addActionListener(this);
+        alunmosButton.addActionListener(this);
         filtrarButton.addActionListener(this);
         resetearFiltroButton.addActionListener(this);
         agregarButton.addActionListener(this);
@@ -70,6 +72,14 @@ public class ControllerProgramasCursos implements ActionListener, MouseListener,
             case "Programas":
                 ModelProgramasCursos cursos = new ModelProgramasCursos();
                 contentTable.setModel(cursos.CargaDatos(m));
+                break;
+            case "Alumnos":
+                try {
+                    frentrada.dispose();
+                    new ControllerAlumnos();
+                } catch (NullPointerException nullP) {
+                    nullP.printStackTrace();
+                }
                 break;
             case "Empresas":
                 try {

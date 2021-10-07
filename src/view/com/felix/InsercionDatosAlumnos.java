@@ -3,24 +3,23 @@ package view.com.felix;
 import Connection.ConectionBD;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ModificacionDatosProfesores extends JDialog {
+public class InsercionDatosAlumnos extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
     private JTextField dniText;
     private JTextField nombreText;
-    private JTextField telefonoText;
-    private JTextField direccionText;
     private JTextField apellidoText;
-    private String tempDni;
+    private JTextField telefonoText;
+    private JTextField edadText;
+    private JTextField direccionText;
 
-    public ModificacionDatosProfesores() {
-        setTitle("Modificar Profesor");
+    public InsercionDatosAlumnos() {
+        setTitle("Agregar Alumno");
         setContentPane(contentPane);
         setSize(500, 500);
         setLocation(ViewEntrada.ancho / 3, ViewEntrada.alto / 4);
@@ -29,27 +28,25 @@ public class ModificacionDatosProfesores extends JDialog {
 
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean successful = true;
                 Statement sentencia = ConectionBD.getStmt();
-                String nom, apel, tel, dir;
+                String dni, nom, apel, tel, edad, dir;
+                boolean successful = true;
+
+                dni = dniText.getText();
                 nom = nombreText.getText();
                 apel = apellidoText.getText();
                 tel = telefonoText.getText();
+                edad = edadText.getText();
                 dir = direccionText.getText();
 
                 try {
-                    String query = String.format("update profesores " +
-                                    "set nombre = '%s', " +
-                                    "apellido = '%s', " +
-                                    "telefono = '%s', " +
-                                    "direccion = '%s' " +
-                                    "where dni = '%s'",
-                            nom, apel, tel, dir, tempDni);
+                    String query = String.format("INSERT INTO alumnos VALUES('%s', '%s', '%s', '%s', '%s', '%s')",
+                            dni, nom, apel, tel, edad, dir);
                     sentencia.executeUpdate(query);
                 } catch (SQLException throwables) {
                     successful = false;
                     throwables.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al modificar la profesores.");
+                    JOptionPane.showMessageDialog(null, "Error al insertar el alumno.");
                 }
                 if (successful) {
                     onOK();
@@ -85,21 +82,5 @@ public class ModificacionDatosProfesores extends JDialog {
 
     private void onCancel() {
         dispose();
-    }
-
-    // Usado para cargar los datos del registro seleccionado
-    public void setData(DefaultTableModel dftm, int s) {
-        for (int i = 0; i < 5; i++)
-            System.out.println(value(dftm, s, i));
-        this.tempDni = value(dftm, s, 0);
-        dniText.setText(value(dftm, s, 0));
-        nombreText.setText(value(dftm, s, 1));
-        apellidoText.setText(value(dftm, s, 2));
-        telefonoText.setText(value(dftm, s, 3));
-        direccionText.setText(value(dftm, s, 4));
-    }
-
-    private String value(DefaultTableModel dftm, int s, int i) {
-        return (String) dftm.getValueAt(s, i);
     }
 }

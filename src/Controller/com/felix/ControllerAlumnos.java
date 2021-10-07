@@ -1,8 +1,8 @@
 package Controller.com.felix;
 
 import Connection.ConectionBD;
+import model.com.felix.ModelAlumnos;
 import model.com.felix.ModelCursos;
-import model.com.felix.ModelEmpresas;
 import view.com.felix.*;
 
 import javax.swing.*;
@@ -10,15 +10,15 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
 import java.util.ArrayList;
 
-public class ControllerCursos implements ActionListener, MouseListener, WindowListener, KeyListener {
+public class ControllerAlumnos implements ActionListener, MouseListener, WindowListener, KeyListener {
     private final ViewEntrada frentrada = new ViewEntrada();
     private final JPanel mainPanel = frentrada.getPanelEntrada();
     private final JTable contentTable = frentrada.getContentTable();
     private final JButton empresasButton = frentrada.getEmpresasButton();
     private final JButton profesoresButton = frentrada.getProfesoresButton();
     private final JButton cursosButton = frentrada.getCursosButton();
-    private final JButton programasCursosButton = frentrada.getProgramasCursosButton();
     private final JButton alumnosButton = frentrada.getAlumnosButton();
+    private final JButton programasCursosButton = frentrada.getProgramasCursosButton();
     private final JButton filtrarButton = frentrada.getFiltrarButton();
     private final JButton resetearFiltroButton = frentrada.getResetearFiltro();
     private final JButton eliminarButton = frentrada.getEliminarButton();
@@ -27,9 +27,9 @@ public class ControllerCursos implements ActionListener, MouseListener, WindowLi
     private final JButton ordenarButton = frentrada.getOrdenadoButton();
     private ArrayList<String> prevFilter = new ArrayList<>();
     private final DefaultTableModel m = null;
-    private String prevQuery = "select * from cursos";
+    private String prevQuery = "select * from alumnos";
 
-    public ControllerCursos() {
+    public ControllerAlumnos() {
         IniciarVentana();
         IniciarEventos();
         PrepararBaseDatos();
@@ -57,7 +57,7 @@ public class ControllerCursos implements ActionListener, MouseListener, WindowLi
     }
 
     public void PrepararBaseDatos() {
-        ModelCursos entrada = new ModelCursos();
+        ModelAlumnos entrada = new ModelAlumnos();
         contentTable.setModel(entrada.CargaDatos(m));
     }
 
@@ -68,23 +68,23 @@ public class ControllerCursos implements ActionListener, MouseListener, WindowLi
         switch (entrada) {
             case "Resetear Filtro": // Limpia el filtro y consulta anterior
                 prevFilter = new ArrayList<>();
-                prevQuery = "select * from cursos";
+                prevQuery = "select * from alumnos";
+            case "Alumnos":
+                ModelAlumnos alumnos = new ModelAlumnos();
+                contentTable.setModel(alumnos.CargaDatos(m));
+                break;
             case "Cursos":
-                ModelCursos cursos = new ModelCursos();
-                contentTable.setModel(cursos.CargaDatos(m));
+                try {
+                    frentrada.dispose();
+                    new ControllerCursos();
+                } catch (NullPointerException nullP) {
+                    nullP.printStackTrace();
+                }
                 break;
             case "Empresas":
                 try {
                     frentrada.dispose();
                     new ControllerEmpresas();
-                } catch (NullPointerException nullP) {
-                    nullP.printStackTrace();
-                }
-                break;
-            case "Alumnos":
-                try {
-                    frentrada.dispose();
-                    new ControllerAlumnos();
                 } catch (NullPointerException nullP) {
                     nullP.printStackTrace();
                 }
@@ -106,30 +106,30 @@ public class ControllerCursos implements ActionListener, MouseListener, WindowLi
                 }
                 break;
             case "Abrir Opciones de Filtrado":
-                FiltradoCursos fc = new FiltradoCursos(contentTable, m);
-                fc.setData(prevFilter); // Carga los datos del filtro anterior
-                fc.setVisible(true);
-                prevFilter = fc.getPreviousFilter();
-                prevQuery = fc.getPreviousQuery();
+                FiltradoAlumnos fa = new FiltradoAlumnos(contentTable, m);
+                fa.setData(prevFilter); // Carga los datos del filtro anterior
+                fa.setVisible(true);
+                prevFilter = fa.getPreviousFilter();
+                prevQuery = fa.getPreviousQuery();
                 break;
             case "Añadir":
-                InsercionDatosCursos insercion = new InsercionDatosCursos();
+                InsercionDatosAlumnos insercion = new InsercionDatosAlumnos();
                 insercion.setVisible(true);
-                ModelCursos mcAdd = new ModelCursos();
-                contentTable.setModel(mcAdd.CargaDatos(m));
+                ModelAlumnos maAdd = new ModelAlumnos();
+                contentTable.setModel(maAdd.CargaDatos(m));
                 break;
             case "Editar":
-                ModelCursos mcEd = new ModelCursos();
-                mcEd.editarRegistro(contentTable, m);
+                ModelAlumnos maEd = new ModelAlumnos();
+                maEd.editarRegistro(contentTable, m);
                 break;
             case "Eliminar":
-                ModelCursos mcE = new ModelCursos();
-                mcE.eliminarRegistro(contentTable, m);
+                ModelAlumnos maE = new ModelAlumnos();
+                maE.eliminarRegistro(contentTable, m);
                 break;
             case "Ordenar":
-                DefaultTableModel cursosDFTM = new ModelCursos().CargaDatos(m, prevQuery);
-                OrdenarCursos oc = new OrdenarCursos(contentTable, cursosDFTM, prevQuery);
-                oc.setVisible(true);
+                DefaultTableModel alumnosDFTM = new ModelAlumnos().CargaDatos(m, prevQuery);
+                OrdenarAlumnos oa = new OrdenarAlumnos(contentTable, alumnosDFTM, prevQuery);
+                oa.setVisible(true);
                 break;
         }
     }

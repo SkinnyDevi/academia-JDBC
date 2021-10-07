@@ -19,7 +19,7 @@ public class InsercionDatosEmpresas extends JDialog {
     private JTextField cifText;
 
     public InsercionDatosEmpresas() {
-        setTitle("Agregar Profesores");
+        setTitle("Agregar Empresa");
         setContentPane(contentPane);
         setSize(500, 500);
         setLocation(ViewEntrada.ancho / 3, ViewEntrada.alto / 4);

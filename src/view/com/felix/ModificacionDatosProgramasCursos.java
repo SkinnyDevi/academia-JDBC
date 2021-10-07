@@ -34,8 +34,8 @@ public class ModificacionDatosProgramasCursos extends JDialog {
                 titu = tituloText.getText();
 
                 try {
-                    String query = String.format("update programaCursos " +
-                                    "duracion = '%s', " +
+                    String query = String.format("update programasCursos " +
+                                    "set duracionCurso = '%s', " +
                                     "titulo = '%s' " +
                                     "where codProgramaCurso = '%s'",
                             dur, titu, tempCodProgramaCurso);

@@ -1,50 +1,43 @@
 package view.com.felix;
 
-import Connection.ConectionBD;
+import model.com.felix.ModelAlumnos;
+import model.com.felix.ModelCursos;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.event.*;
-import java.sql.SQLException;
-import java.sql.Statement;
 
-public class InsercionDatosCursos extends JDialog {
+public class OrdenarAlumnos extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
-    private JTextField codProgramaCursoText;
-    private JTextField fechaInicioText;
-    private JTextField fechaFinText;
+    private JComboBox<String> filasCombo;
+    private JCheckBox descendenteCheckBox;
 
-    public InsercionDatosCursos() {
-        setTitle("Agregar Curso");
+    public OrdenarAlumnos(JTable dbTable, DefaultTableModel dftm, String pvQuery) {
         setContentPane(contentPane);
-        setSize(500, 500);
+        setSize(400, 150);
         setLocation(ViewEntrada.ancho / 3, ViewEntrada.alto / 4);
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
 
+        DefaultComboBoxModel<String> filas = new DefaultComboBoxModel<>();
+        for (String t : ModelAlumnos.campos) {
+            filas.addElement(t);
+        }
+        filasCombo.setModel(filas);
+
         buttonOK.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Statement sentencia = ConectionBD.getStmt();
-                String codP, fI, fF;
-                boolean successful = true;
-
-                codP = codProgramaCursoText.getText();
-                fI = fechaInicioText.getText();
-                fF = fechaFinText.getText();
-
-                try {
-                    String query = String.format("insert into cursos values(null, '%s', '%s', '%s')",
-                            codP, fI, fF);
-                    sentencia.executeUpdate(query);
-                } catch (SQLException throwables) {
-                    successful = false;
-                    throwables.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Error al insertar el curso.");
-                }
-                if (successful) {
-                    onOK();
-                }
+                String c = (String) filasCombo.getSelectedItem();
+                c = c.toLowerCase();
+                String orderQ = pvQuery + " order by " + c;
+                if (descendenteCheckBox.isSelected())
+                    orderQ += " desc";
+                System.out.println(orderQ);
+                ModelCursos mc = new ModelCursos();
+                dbTable.setModel(mc.CargaDatos(dftm, orderQ));
+                onOK();
             }
         });
 

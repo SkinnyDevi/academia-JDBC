@@ -21,7 +21,7 @@ public class ModificacionDatosEmpresas extends JDialog {
     private String tempCif;
 
     public ModificacionDatosEmpresas() {
-        setTitle("Modificar Asignatura");
+        setTitle("Modificar Empresa");
         setContentPane(contentPane);
         setSize(500, 500);
         setLocation(ViewEntrada.ancho / 3, ViewEntrada.alto / 4);

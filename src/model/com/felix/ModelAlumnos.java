@@ -1,8 +1,8 @@
 package model.com.felix;
 
 import Connection.ConectionBD;
-import view.com.felix.ModificacionDatosProfesores;
-import view.com.felix.ModificacionDatosProgramasCursos;
+import view.com.felix.ModificacionDatosAlumnos;
+import view.com.felix.ModificacionDatosCursos;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -10,28 +10,31 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class ModelProgramasCursos {
+public class ModelAlumnos {
 
     private Statement stmt;
     public static String[] campos; // Usado para recoger campos en otros dialogos
 
-    public ModelProgramasCursos() {
+    public ModelAlumnos() {
         ConectionBD.OpenConn();
     }
 
     public DefaultTableModel CargaDatos(DefaultTableModel m) {
-        campos = new String[]{"Codigo Programa Curso", "Duracion (Horas)", "Titulo"};
+        campos = new String[]{"DNI", "Nombre", "Apellido", "Telefono", "Edad", "Direccion"};
         m = new DefaultTableModel(null, campos);
 
         try {
             stmt = ConectionBD.getStmt();
-            ResultSet rs = stmt.executeQuery("select * from programasCursos");
-            String[] fila = new String[3];
+            ResultSet rs = stmt.executeQuery("select * from alumnos");
+            String[] fila = new String[6];
 
             while (rs.next()) {
-                fila[0] = rs.getString("codProgramaCurso");
-                fila[1] = rs.getString("duracionCurso");
-                fila[2] = rs.getString("titulo");
+                fila[0] = rs.getString("dni");
+                fila[1] = rs.getString("nombre");
+                fila[2] = rs.getString("apellido");
+                fila[3] = rs.getString("telefono");
+                fila[4] = rs.getString("edad");
+                fila[5] = rs.getString("direccion");
                 m.addRow(fila);
             }
         } catch (SQLException e) {
@@ -42,18 +45,21 @@ public class ModelProgramasCursos {
 
     // Usado para cargar un modelo con una consulta especifica (Filtros y Ordenados)
     public DefaultTableModel CargaDatos(DefaultTableModel m, String sql) {
-        campos = new String[]{"Codigo Programa Curso", "Duracion (Horas)", "Titulo"};
+        campos = new String[]{"DNI", "Nombre", "Apellido", "Telefono", "Edad", "Direccion"};
         m = new DefaultTableModel(null, campos);
 
         try {
             stmt = ConectionBD.getStmt();
             ResultSet rs = stmt.executeQuery(sql);
-            String[] fila = new String[3];
+            String[] fila = new String[6];
 
             while (rs.next()) {
-                fila[0] = rs.getString("codProgramaCurso");
-                fila[1] = rs.getString("duracionCurso");
-                fila[2] = rs.getString("titulo");
+                fila[0] = rs.getString("dni");
+                fila[1] = rs.getString("nombre");
+                fila[2] = rs.getString("apellido");
+                fila[3] = rs.getString("telefono");
+                fila[4] = rs.getString("edad");
+                fila[5] = rs.getString("direccion");
                 m.addRow(fila);
             }
         } catch (SQLException e) {
@@ -74,21 +80,18 @@ public class ModelProgramasCursos {
                 showDialog("No se ha seleccionado ningun registro");
             } else {
                 int confirm = JOptionPane.showConfirmDialog(null,
-                        "Eliminar Programa?", "Eliminar Registro", JOptionPane.YES_NO_OPTION);
+                        "Eliminar alumno?", "Eliminar Registro", JOptionPane.YES_NO_OPTION);
                 if (confirm == JOptionPane.YES_OPTION) {
-                    DefaultTableModel programasCursos = new ModelProgramasCursos().CargaDatos(m);
-                    String codProgramasCurso = (String) programasCursos.getValueAt(selected, 0);
+                    DefaultTableModel alumnos = new ModelAlumnos().CargaDatos(m);
+                    String dni = (String) alumnos.getValueAt(selected, 0);
                     Statement sentencia = ConectionBD.getStmt();
-                    sentencia.executeUpdate(String.format("delete from programasCursos where codProgramaCurso = '%s'", codProgramasCurso));
-                    ModelProgramasCursos p = new ModelProgramasCursos();
+                    sentencia.executeUpdate(String.format("delete from alumnos where dni = '%s'", dni));
+                    ModelAlumnos p = new ModelAlumnos();
                     tabla.setModel(p.CargaDatos(m));
                 }
             }
         } catch (Exception exc) {
             showDialog("Error al eliminar registro.");
-            if (exc.getMessage().contains("Cannot delete or update")) {
-                showDialog("No se ha podido eliminar la entrada \ndado que existen datos en la tabla 'Cursos' \nrelacionados a este.");
-            }
             exc.printStackTrace();
         }
     }
@@ -99,17 +102,17 @@ public class ModelProgramasCursos {
             if (selected == -1) {
                 showDialog("No se ha seleccionado ningun registro");
             } else {
-                ModificacionDatosProgramasCursos modificacion = new ModificacionDatosProgramasCursos();
-                DefaultTableModel profesores = new ModelProgramasCursos().CargaDatos(m);
-                modificacion.setData(profesores, selected); // Cargar datos del registro seleccionado
+                ModificacionDatosAlumnos modificacion = new ModificacionDatosAlumnos();
+                DefaultTableModel alumnos = new ModelAlumnos().CargaDatos(m);
+                modificacion.setData(alumnos, selected); // Cargar datos del registro seleccionado
                 modificacion.setVisible(true);
-                tabla.setModel(new ModelProgramasCursos().CargaDatos(m));
+                tabla.setModel(new ModelAlumnos().CargaDatos(m));
             }
         } catch (Exception exc) {
             exc.printStackTrace();
-            showDialog("Ocurrio un error al modificar el programa");
+            showDialog("Ocurrio un error al modificar el alumno");
         }
-        ModelProgramasCursos a = new ModelProgramasCursos();
+        ModelAlumnos a = new ModelAlumnos();
         tabla.setModel(a.CargaDatos(m));
     }
 }
